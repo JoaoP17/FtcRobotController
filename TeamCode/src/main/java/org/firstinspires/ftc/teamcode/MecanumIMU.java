@@ -19,7 +19,6 @@ public class MecanumIMU extends OpMode {
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         imu = hardwareMap.get(IMU.class, "imu");
-        IMU imu = hardwareMap.get(IMU.class, "imu");
         pid = new PIDcontrolador(0,0,0);
 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -38,10 +37,11 @@ public class MecanumIMU extends OpMode {
         double Y = gamepad1.left_stick_y;
         double rx = gamepad1.right_stick_x;
         double denominator = Math.max(Math.abs(Y) + Math.abs(X) + Math.abs(rx), 1);
+        double anguloAlvo = 0;
 
-        if (Math.abs(rx) > 0.1) {
+        if (Math.abs(rx) <0.1) {
 
-            double anguloAlvo = 0;
+         anguloAlvo = 0;
             double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
             double correcao = pid.calculo(anguloAlvo, botHeading);
 
@@ -73,6 +73,7 @@ public class MecanumIMU extends OpMode {
             leftBack.setPower(backLeftPower);
             rightFront.setPower(frontRightPower);
             rightBack.setPower(backRightPower);
+            anguloAlvo = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         }
 
 
